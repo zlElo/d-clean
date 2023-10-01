@@ -1,0 +1,4 @@
+sel disk 1
+clean
+create partition primary
+format quick fs=ntfs

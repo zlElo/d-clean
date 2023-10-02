@@ -1,6 +1,9 @@
 # d-clean
 D-clean is a program to erase hard drives, secure! 
 
+## Supported OS's
+- Windows 10 (or higher)
+
 
 ## Information for use
 - Attention with the number of the drive! Click on the information button and look at the drives.

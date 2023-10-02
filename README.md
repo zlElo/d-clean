@@ -13,4 +13,5 @@ D-clean is a program to erase hard drives, secure!
 3. window with attention with a os drive
 
 
+## Data loss or something else
 I ACCEPT NO LIABILITY FOR LOSS OF DATA OR INCORRECT DELETION OF THE HARD DISK! A 100% DELETION IS NOT POSSIBLE, THIS TOOL ONLY HELPS TO DELETE SAFER THAN NORMAL FORMATTING!

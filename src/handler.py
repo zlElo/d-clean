@@ -1,6 +1,5 @@
 import os
 import subprocess
-import pyuac
 from disk_filler import overwriter
 
 def outliner(output_):
@@ -19,31 +18,23 @@ def outliner(output_):
     print('+' + '-' * box_width + '+')
 
 
-def delete_gpt_mbr():
-
-    result_ = subprocess.run(['diskpart', '/s', 'src\list_disk.txt'], capture_output=True, text=True)
-    output_ = result_.stdout
-    outliner(output_)
-
-
-    selected_drive = input('\nEnter number of drive: ')
-
+def delete_gpt_mbr(second_selected_drive): # selected drive is in this code snippet the number of the diskpart info
 
     # write into files
     with open('src\del_drive.txt', 'w') as f:
-        command_to_write = f'sel disk {selected_drive}\nclean\ncreate partition primary\nformat quick fs=ntfs'
+        command_to_write = f'sel disk {second_selected_drive}\nclean\ncreate partition primary\nformat quick fs=ntfs'
         f.write(command_to_write)
 
     with open('src\delete_gpt.txt', 'w') as f:
-        command_to_write = f'sel disk {selected_drive}\nclean'
+        command_to_write = f'sel disk {second_selected_drive}\nclean'
         f.write(command_to_write)
 
     with open('src\delete_mbr.txt', 'w') as f:
-        command_to_write = f'sel disk {selected_drive}\nclean\nconvert gpt'
+        command_to_write = f'sel disk {second_selected_drive}\nclean\nconvert gpt'
         f.write(command_to_write)
         
     with open('src\clean_all.txt', 'w') as f:
-        command_to_write = f'sel disk {selected_drive}\nclean all'
+        command_to_write = f'sel disk {second_selected_drive}\nclean all'
         f.write(command_to_write)
 
 
@@ -65,20 +56,15 @@ def encrypt(file):
         encryptet_out.write(encryptet)
 
 
-def find_select_encrypt():
-    drives = ['%s:' % d for d in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' if os.path.exists('%s:' % d)]
+def find_select_encrypt(selected_drive, second_selected_drive, bar, actual_progress_info, window):
 
-    print("Available drives:")
-    for drive in drives:
-        print(drive)
-
-    selected_drive = input("Enter Letter of Drive (for example D:): ")
+    bar.set(0.1)
     
     if not os.path.exists(selected_drive):
         print("Drive not found.")
         exit()
 
-    # Überprüfen, ob das ausgewählte Laufwerk das Systemlaufwerk ist
+    # check if drive is available
     if os.path.splitdrive(selected_drive)[0] == os.environ['SYSTEMDRIVE']:
         print("Wasnt able to select drive")
         exit()
@@ -89,27 +75,34 @@ def find_select_encrypt():
             chosen_file = os.path.join(root, file)
             print(chosen_file)
             encrypt(chosen_file)
+            actual_progress_info.configure(text=f'encrypt: {chosen_file}')
 
+    bar.set(0.2)
+
+    steps = 0.2
+    step_ = 0
 
     # delete functions
     for i in range(3):
-        delete_gpt_mbr()
-        overwriter(selected_drive)
+        steps += 0.1
+        step_ += 1
 
-    
+        bar.set(steps)
+        actual_progress_info.configure(text=f'({step_}/3) Delete mbr')
+        delete_gpt_mbr(second_selected_drive)
+        
+        bar.set(steps)
+        actual_progress_info.configure(text=f'({step_}/3) Fill the full drive with files')
+        overwriter(selected_drive)
+        
+
+    steps += 0.2
+    actual_progress_info.configure(text=f'set to 0')
     # make full clean
     subprocess.run(['diskpart', '/s', 'src\clean_all.txt'])
+    bar.step(steps)
 
 
     print('\n\n\n\n################### \- Progress done -/ ###################')
-
-
-    input('\nPress enter to exit...')
-
-
-if pyuac.isUserAdmin():
-    find_select_encrypt()
-else:
-    pyuac.runAsAdmin()
 
 

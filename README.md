@@ -5,6 +5,11 @@ D-clean is a program to erase hard drives, secure!
 - Windows 10 (or higher)
 
 
+## Deletion progress
+1. Encrypt all files on device
+2. 3x mbr clean/gpt deletion and write the hard drive completely with diskpart
+3. Set drive to 0 with diskpart
+
 ## Information for use
 - Attention with the number of the drive! Click on the information button and look at the drives.
 - Attention with letter of drive! It is a security fallback included, but it isn't 100% protection to don't loose Data on the local system

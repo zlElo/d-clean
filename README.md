@@ -16,9 +16,9 @@ D-clean is a program to erase hard drives, secure!
 
 
 ## To do
-1. Setup exe
-2. Different security levels
-3. window with attention with a os drive
+[] Setup exe
+[] Different security levels
+[] window with attention with a os drive
 
 
 ## Data loss or something else

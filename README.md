@@ -8,7 +8,7 @@ D-clean is a program to erase hard drives, secure!
 ## Deletion progress
 1. Encrypt all files on device
 2. 3x mbr clean/gpt deletion and write the hard drive completely with diskpart
-3. Set drive to 0 with diskpart
+3. Set drive to 0. For this operation use the program diskpart
 
 ## Information for use
 - Attention with the number of the drive! Click on the information button and look at the drives.
@@ -16,9 +16,11 @@ D-clean is a program to erase hard drives, secure!
 
 
 ## To do
-1. Setup exe
-2. Different security levels
-3. window with attention with a os drive
+- [x] exe release
+- [x] GUI instead of terminal utility 
+- [ ] Setup exe
+- [ ] Different security levels
+- [ ] window with attention with a os drive
 
 
 ## Data loss or something else

@@ -69,8 +69,17 @@ def GUI():
     info_btn = customtkinter.CTkButton(frame, text='ⓘ', width=10, command=info_btn_window)
     info_btn.place(x=10, y=104)
 
+
+    # Slider for future feature
+    #slider_label = customtkinter.CTkLabel(frame, text='Security level:')
+    #slider_label.pack(pady=10)
+
+    #slider = customtkinter.CTkSlider(frame)
+    #slider.pack()
+
+
     start_btn = customtkinter.CTkButton(frame, text='Start wiping', command=lambda: starting_progress(drive_letter_combo_box, drive_number_combo_box, bar, actual_progress_info, root))
-    start_btn.pack(pady=15)
+    start_btn.pack(pady=20)
 
     
     # Not frame content
@@ -84,9 +93,12 @@ def GUI():
     actual_progress_info = customtkinter.CTkLabel(root, text='/')
     actual_progress_info.pack()
 
+    
+
     root.mainloop()
 
 
+# start of program with adnib rights check
 if pyuac.isUserAdmin():
     GUI()
 else:

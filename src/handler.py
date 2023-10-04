@@ -1,21 +1,32 @@
 import os
 import subprocess
 from disk_filler import overwriter
+import customtkinter
 
-def outliner(output_):
-    print('')
-    # Calculate the width of the box based on the length of the longest line in the output
-    box_width = max(len(line) for line in output_.split('\n')) + 2
 
-    # Print the top border of the box
-    print('+' + '-' * box_width + '+')
+# function to continue after warning with os drive
+def go(root):
+    root.destroy()
 
-    # Print the content of the box with vertical lines on the sides
-    for line in output_.split('\n'):
-        print('|' + line.ljust(box_width) + '|')
+# function to cancel after warning with os drive
+def cancel(root, window):
+    window.destroy()
+    root.destroy()
+    exit()
 
-    # Print the bottom border of the box
-    print('+' + '-' * box_width + '+')
+# os drive error
+def error_os_drive(window):
+    root = customtkinter.CTk()
+    root.title('ATTENTION!')
+
+    customtkinter.CTkLabel(root, text='The selected drive contains an OS, are you sure to continue?').pack(padx=30, pady=10)
+
+    customtkinter.CTkButton(root, text='yes', fg_color='red', hover_color='salmon', command=lambda: go(root)).pack(pady=15, padx=36, side='left')
+    customtkinter.CTkButton(root, text='no', fg_color='green', hover_color='yellowgreen', command=lambda: cancel(root, window)).pack(pady=15, padx=10, side='left')
+
+    root.mainloop()
+
+
 
 
 def delete_gpt_mbr(second_selected_drive): # selected drive is in this code snippet the number of the diskpart info
@@ -46,8 +57,7 @@ def delete_gpt_mbr(second_selected_drive): # selected drive is in this code snip
 
     subprocess.run(['diskpart', '/s', 'src\del_drive.txt'])
 
-
-
+# function to encrypt a file with 100.000 random key
 def encrypt(file):
     have_to_encrypt = open(file, "rb").read()
     key = os.urandom(100000)
@@ -55,19 +65,20 @@ def encrypt(file):
     with open(file, "wb") as encryptet_out:
         encryptet_out.write(encryptet)
 
-
+# main handler
 def find_select_encrypt(selected_drive, second_selected_drive, bar, actual_progress_info, window):
 
     bar.set(0.1)
     
     if not os.path.exists(selected_drive):
-        print("Drive not found.")
+        print("[log] Drive not found.")
         exit()
 
     # check if drive is available
     if os.path.splitdrive(selected_drive)[0] == os.environ['SYSTEMDRIVE']:
-        print("Wasnt able to select drive")
-        exit()
+        print("[log] Wasnt able to select drive")
+        error_os_drive(window)
+        
 
     print('\n\nFiles to encrypt:\n')
     for root, dirs, files in os.walk(selected_drive):
